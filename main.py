@@ -1,5 +1,8 @@
 import os
 import logging
+import base64
+import fitz  # PyMuPDF
+from io import BytesIO
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
@@ -11,7 +14,10 @@ load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
-GROQ_MODEL = os.getenv("GROQ_MODEL")
+
+# الموديلات المطلوبة
+TEXT_MODEL = "llama-3.3-70b-versatile"
+VISION_MODEL = "llama-3.2-11b-vision-preview"
 
 # إعداد الـ Groq client
 client = Groq(api_key=GROQ_API_KEY)
@@ -22,17 +28,19 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-# نظام الذاكرة (Memory) - بسيط في الذاكرة حالياً (In-memory)
-# في الإنتاج يفضل استخدام قاعدة بيانات مثل Redis أو SQLite
+# نظام الذاكرة (Memory) - تخزين آخر 15 رسالة لكل مستخدم
 user_memory = {}
+MEMORY_LIMIT = 15
 
-SYSTEM_PROMPT = "مساعد تقني وتنفيذي ذكي جداً من تطوير المهندس صلاح الوافي."
+SYSTEM_PROMPT = "You are S-Core, a professional AI assistant developed by Engineer Salah Al-Wafi. You are helpful, technical, and precise."
+
+def encode_image(image_bytes):
+    return base64.b64encode(image_bytes).decode('utf-8')
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     user_id = user.id
     
-    # تنبيه الأدمن عند دخول مستخدم جديد
     if user_id not in user_memory:
         user_memory[user_id] = []
         try:
@@ -43,51 +51,103 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             logging.error(f"Error sending admin alert: {e}")
 
-    welcome_text = f"مرحباً {user.first_name}! أنا S-Core، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟"
+    welcome_text = f"مرحباً {user.first_name}! أنا S-Core، مساعدك الذكي المتطور. يمكنني الآن فهم الصور وقراءة ملفات PDF. كيف أساعدك؟"
     await update.message.reply_text(welcome_text)
 
-async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_input = update.message.text
-
+    
     if user_id not in user_memory:
         user_memory[user_id] = []
 
     # إضافة رسالة المستخدم للذاكرة
     user_memory[user_id].append({"role": "user", "content": user_input})
-    
-    # الحفاظ على آخر 10 رسائل فقط لتوفير التوكنز
-    if len(user_memory[user_id]) > 10:
-        user_memory[user_id] = user_memory[user_id][-10:]
+    if len(user_memory[user_id]) > MEMORY_LIMIT:
+        user_memory[user_id] = user_memory[user_id][-MEMORY_LIMIT:]
 
     try:
-        # إرسال الطلب لـ Groq
         messages = [{"role": "system", "content": SYSTEM_PROMPT}] + user_memory[user_id]
-        
         response = client.chat.completions.create(
-            model=GROQ_MODEL,
+            model=TEXT_MODEL,
             messages=messages,
         )
-        
         bot_response = response.choices[0].message.content
-        
-        # إضافة رد البوت للذاكرة
         user_memory[user_id].append({"role": "assistant", "content": bot_response})
-        
         await update.message.reply_text(bot_response)
-        
     except Exception as e:
-        logging.error(f"Error calling Groq API: {e}")
+        logging.error(f"Error in text chat: {e}")
         await update.message.reply_text("عذراً، حدث خطأ أثناء معالجة طلبك.")
+
+async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    caption = update.message.caption or "What is in this image?"
+    
+    photo_file = await update.message.photo[-1].get_file()
+    photo_bytes = await photo_file.download_as_bytearray()
+    base64_image = encode_image(photo_bytes)
+
+    try:
+        response = client.chat.completions.create(
+            model=VISION_MODEL,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": caption},
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                        },
+                    ],
+                }
+            ],
+        )
+        await update.message.reply_text(response.choices[0].message.content)
+    except Exception as e:
+        logging.error(f"Error in vision: {e}")
+        await update.message.reply_text("عذراً، لم أتمكن من تحليل هذه الصورة.")
+
+async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    doc = update.message.document
+    if doc.mime_type == 'application/pdf':
+        await update.message.reply_text("جاري قراءة ملف PDF وتلخيصه، انتظر لحظة...")
+        
+        pdf_file = await doc.get_file()
+        pdf_bytes = await pdf_file.download_as_bytearray()
+        
+        try:
+            # قراءة الـ PDF باستخدام PyMuPDF
+            with fitz.open(stream=pdf_bytes, filetype="pdf") as doc_pdf:
+                text = ""
+                for page in doc_pdf:
+                    text += page.get_text()
+            
+            # تلخيص النص (نأخذ أول 4000 حرف لتجنب تجاوز حدود الموديل)
+            summary_prompt = f"Please summarize the following PDF content precisely:\n\n{text[:4000]}"
+            
+            response = client.chat.completions.create(
+                model=TEXT_MODEL,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": summary_prompt}
+                ],
+            )
+            await update.message.reply_text(f"📄 تلخيص الملف:\n\n{response.choices[0].message.content}")
+        except Exception as e:
+            logging.error(f"Error in PDF processing: {e}")
+            await update.message.reply_text("عذراً، حدث خطأ أثناء قراءة ملف PDF.")
+    else:
+        await update.message.reply_text("حالياً، يمكنني معالجة ملفات PDF فقط.")
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     
-    start_handler = CommandHandler('start', start)
-    chat_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), chat)
+    application.add_handler(CommandHandler('start', start))
+    application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
+    application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     
-    application.add_handler(start_handler)
-    application.add_handler(chat_handler)
-    
-    print("S-Core Bot is running...")
+    print("S-Core Pro is running...")
     application.run_polling()

@@ -1,1 +1,7 @@
-python-telegram-bot\ngroq\npython-dotenv\nPyMuPDF\npillow
+python-telegram-bot==21.10
+groq==0.15.0
+python-dotenv==1.0.1
+PyMuPDF==1.25.3
+pillow==11.1.0
+duckduckgo-search==8.1.1
+pydub==0.25.1

@@ -14,7 +14,7 @@ load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
-
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 # الموديلات المطلوبة
 TEXT_MODEL = "llama-3.3-70b-versatile"
 VISION_MODEL = "llama-3.2-11b-vision-preview"

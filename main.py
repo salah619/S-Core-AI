@@ -10,10 +10,23 @@ from groq import Groq
 
 # تحميل المتغيرات البيئية
 load_dotenv()
+def get_env(name: str, required=True, cast=None):
+    value = os.getenv(name)
+    if required and not value:
+        raise RuntimeError(f"Environment variable {name} is missing")
+    if cast and value:
+        return cast(value)
+    return value
 
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-ADMIN_ID = int(os.getenv("ADMIN_ID"))
+
+# =========================
+# المتغيرات
+# =========================
+TELEGRAM_TOKEN = get_env("TELEGRAM_TOKEN")
+GROQ_API_KEY = get_env("GROQ_API_KEY")
+ADMIN_ID = get_env("ADMIN_ID", cast=int)
+TAVILY_API_KEY = get_env("TAVILY_API_KEY", required=False)
+
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 # الموديلات المطلوبة
 TEXT_MODEL = "llama-3.3-70b-versatile"
@@ -142,6 +155,7 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("حالياً، يمكنني معالجة ملفات PDF فقط.")
 
 if __name__ == '__main__':
+    logging.info("Starting S-Core Pro AI Assistant 🚀")
     application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     
     application.add_handler(CommandHandler('start', start))

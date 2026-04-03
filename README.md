@@ -40,10 +40,11 @@ pip install -r requirements.txt
 4. Run the Bot
 python3 main.py
 
-## 📱 Interface Preview
-
-![S-Core 1](screenshots/score1.jpg)
-![S-Core 2](screenshots/score2.jpg)
+## 📱 واجهة البوت (Interface)
+<p align="center">
+  <img src="screenshots/score1.jpg" width="300" />
+  <img src="screenshots/score2.jpg" width="300" />
+</p>
 
 
 ​Developed by: Eng. Salah Al-Wafi 🧑‍💻

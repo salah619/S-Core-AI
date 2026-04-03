@@ -41,9 +41,9 @@ pip install -r requirements.txt
 python3 main.py
 
 ## 📱 Interface Preview
-<p align="center">
-  <img src="screenshots/score1.jpg" width="300">
-  <img src="screenshots/score2.jpg" width="300">
-</p>
+
+![S-Core 1](screenshots/score1.jpg)
+![S-Core 2](screenshots/score2.jpg)
+
 
 ​Developed by: Eng. Salah Al-Wafi 🧑‍💻

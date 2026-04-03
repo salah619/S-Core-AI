@@ -38,8 +38,9 @@ TAVILY_API_KEY="your_tavily_key" # Optional
 pip install -r requirements.txt
 
 ### 4. Run the Bot
-```bash
+
 python3 main.py
+```
 
 ## 📱 واجهة البوت (Interface)
 

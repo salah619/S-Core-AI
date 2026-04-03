@@ -20,14 +20,14 @@ The **S-Core Pro AI Assistant** is a high-performance Telegram bot built for 202
 *   **Search Intelligence**: Tavily API
 *   **Database**: SQLite
 
-###   ▶️ Setup & Installation (Termux/Linux)
+##   ▶️ Setup & Installation (Termux/Linux)
 
-# 1. Clone & Navigate
+### 1. Clone & Navigate
 ```bash
 git clone [https://github.com/salah619/S-Core-AI.git](https://github.com/salah619/S-Core-AI.git)
 cd S-Core-AI
 ```
-# 2. Environment Configuration
+### 2. Environment Configuration
 ```bash
 ​Create a .env file in the root directory:
 TELEGRAM_TOKEN="your_bot_token"
@@ -35,20 +35,20 @@ GROQ_API_KEY="your_groq_key"
 ADMIN_ID=123456789
 TAVILY_API_KEY="your_tavily_key" # Optional
 ```
-# 3. Install Dependencies
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
-# 4. Run the Bot
+### 4. Run the Bot
 ```bash
 python3 main.py
 ```
 
-### 📱 واجهة البوت (Interface)
+## 📱 واجهة البوت (Interface)
 
 <p align="center">
   <img src="screenshots/score1.jpg" width="300" />
   <img src="screenshots/score2.jpg" width="300" />
 </p>
 
-# Developed by: Eng. Salah Al-Wafi 🧑‍💻
+#### Developed by: Eng. Salah Al-Wafi 🧑‍💻

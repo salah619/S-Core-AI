@@ -37,14 +37,15 @@ TAVILY_API_KEY="your_tavily_key" # Optional
 3. Install Dependencies
 pip install -r requirements.txt
 
-4. Run the Bot
+### 4. Run the Bot
+```bash
 python3 main.py
 
 ## 📱 واجهة البوت (Interface)
+
 <p align="center">
   <img src="screenshots/score1.jpg" width="300" />
   <img src="screenshots/score2.jpg" width="300" />
 </p>
 
-
-​Developed by: Eng. Salah Al-Wafi 🧑‍💻
+Developed by: Eng. Salah Al-Wafi 🧑‍💻

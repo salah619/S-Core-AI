@@ -79,3 +79,9 @@ The bot will connect to Telegram, and you can start interacting with it through 
 ## 📄 License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## 📱 واجهة البوت (Interface)
+<p align="center">
+  <img src="screenshots/score1.jpg" width="300">
+  <img src="screenshots/score2.jpg" width="300">
+</p>

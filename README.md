@@ -41,7 +41,6 @@ pip install -r requirements.txt
 python3 main.py
 
 ## 📱 Interface Preview
-
 <p align="center">
   <img src="screenshots/score1.jpg" width="300">
   <img src="screenshots/score2.jpg" width="300">

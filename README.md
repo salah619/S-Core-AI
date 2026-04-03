@@ -1,87 +1,48 @@
-# S-Core Pro AI Assistant
+# S-Core Pro AI Assistant 🤖
+![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
+![AI-Engine](https://img.shields.io/badge/Model-Llama%203.3%20(70B)-orange.svg)
+![Inference](https://img.shields.io/badge/Powered%20By-Groq%20Cloud-green.svg)
 
 ## 📌 Overview
+The **S-Core Pro AI Assistant** is a high-performance Telegram bot built for 2026 standards. It leverages the ultra-fast **Groq Cloud API** and **Llama 3.3** models to provide near-instant responses. Whether it's complex coding assistance, real-time web search, or visual analysis, S-Core is designed to be your executive AI agent.
 
-The **S-Core Pro AI Assistant** is an advanced, multi-functional Telegram bot designed to provide intelligent assistance through a rich set of features. This bot integrates cutting-edge AI capabilities, including voice-to-text transcription (powered by OpenAI Whisper), real-time web search, visual analysis, and PDF content processing. It leverages SQLite for persistent data storage, ensuring a seamless and responsive user experience. The S-Core Pro AI Assistant aims to be a versatile tool for information retrieval, content understanding, and interactive communication.
-
-## ⚙️ Features
-
-*   **Intelligent Conversational AI**: Engages users in natural language conversations, providing accurate and contextually relevant responses.
-*   **Voice-to-Text Transcription (Whisper Integration)**: Converts spoken language from audio messages into text, enabling hands-free interaction and accessibility.
-*   **Real-time Web Search Capabilities**: Fetches up-to-date information from the internet to answer queries and provide comprehensive details on various topics.
-*   **Visual Content Analysis**: Processes and interprets images, allowing the bot to describe visual content, identify objects, and extract relevant information from pictures.
-*   **PDF Document Understanding**: Extracts and summarizes content from PDF files, making it easy to get key information from documents directly through the chat interface.
-*   **Persistent Data Storage (SQLite)**: Utilizes SQLite to store user interactions, preferences, and other relevant data, ensuring continuity and personalized experiences.
-*   **Telegram Bot API Integration**: Built on the Telegram Bot API for robust and reliable communication with users.
+## ⚙️ Key Features
+*   **Lightning-Fast Conversational AI**: Powered by `Llama-3.3-70b-versatile` for high-reasoning tasks.
+*   **Visual Intelligence**: Integrated with `Llama-3.2-11b-vision` for analyzing images and visual content.
+*   **Real-time Web Search**: Uses **Tavily API** to fetch up-to-date information from the internet.
+*   **Secure Infrastructure**: Environment-based configuration (Zero hardcoded keys).
+*   **Persistent Memory**: SQLite-backed history for seamless user interactions.
 
 ## 🛠 Tech Stack
-
-*   **Programming Language**: Python 3.9+
-*   **Telegram Bot Framework**: `python-telegram-bot`
-*   **AI/ML Libraries**: OpenAI API (Whisper for ASR, GPT for conversational AI), Google Gemini API (for advanced multimodal capabilities like vision)
-*   **Web Scraping/Search**: `requests`, `BeautifulSoup` (or similar for web content retrieval)
-*   **PDF Processing**: `PyPDF2` (or similar for PDF text extraction)
+*   **Language**: Python 3.9+
+*   **Inference Engine**: [Groq Cloud](https://groq.com/) (Llama Models)
+*   **Bot Framework**: `python-telegram-bot` (v20+)
+*   **Search Intelligence**: Tavily API
 *   **Database**: SQLite
-*   **Dependency Management**: `pip`
-*   **Environment Management**: `venv`
 
-## ▶️ How to Run (for Termux/Linux Users)
+## ▶️ Setup & Installation (Termux/Linux)
 
-To set up and run the S-Core Pro AI Assistant on your Termux or Linux environment, follow these detailed instructions:
-
-### Prerequisites
-
-*   **Python 3.9+**: Ensure Python version 3.9 or newer is installed.
-*   **`pip`**: The Python package installer should be available.
-*   For Termux users, install Python and pip using `pkg install python`.
-*   A Telegram Bot Token (obtained from BotFather on Telegram).
-*   OpenAI API Key and/or Google Gemini API Key for AI functionalities.
-
-### Installation Steps
-
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/salah619/S-Core-AI.git
-    cd S-Core-AI
-    ```
-
-2.  **Create and Activate a Virtual Environment** (Recommended for dependency isolation):
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # For Linux/Termux
-    # On Windows, use `venv\Scripts\activate`
-    ```
-
-3.  **Install Required Dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4.  **Configure Environment Variables**:
-    Create a `.env` file in the project's root directory and add your API keys and Telegram bot token:
-    ```
-    TELEGRAM_BOT_TOKEN="YOUR_TELEGRAM_BOT_TOKEN"
-    OPENAI_API_KEY="YOUR_OPENAI_API_KEY" # Optional, if using OpenAI models
-    GEMINI_API_KEY="YOUR_GEMINI_API_KEY" # Optional, if using Google Gemini models
-    ```
-    *Replace placeholders with your actual tokens and keys.*
-
-### Running the Bot
-
-To start the Telegram bot, execute the following command from the project's root directory:
-
+### 1. Clone & Navigate
 ```bash
+git clone [https://github.com/salah619/S-Core-AI.git](https://github.com/salah619/S-Core-AI.git)
+cd S-Core-AI
+
+2. Environment Configuration
+​Create a .env file in the root directory:
+TELEGRAM_TOKEN="your_bot_token"
+GROQ_API_KEY="your_groq_key"
+ADMIN_ID=123456789
+TAVILY_API_KEY="your_tavily_key" # Optional
+
+3. Install Dependencies
+pip install -r requirements.txt
+
+4. Run the Bot
 python3 main.py
-```
 
-The bot will connect to Telegram, and you can start interacting with it through the Telegram application.
-
-## 📄 License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
-## 📱 واجهة البوت (Interface)
-<p align="center">
-  <img src="screenshots/score1.jpg" width="300">
-  <img src="screenshots/score2.jpg" width="300">
+📱 Interface Preview
+​<p align="center">
+<img src="screenshots/score1.jpg" width="300" alt="S-Core Interface 1">
+<img src="screenshots/score2.jpg" width="300" alt="S-Core Interface 2">
 </p>
+​Developed by: Eng. Salah Al-Wafi 🧑‍💻
